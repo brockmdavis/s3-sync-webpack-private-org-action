@@ -63,11 +63,14 @@ aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}" > ~/.aws/credentials
 echo "Change directory to Source"
 cd $SOURCE_DIR
 
-echo "Install webpack"
-npm install webpack webpack-cli npm-cli-login
+echo "Install npm-cli-login"
+npm install npm-cli-login
 
 echo "Set private org scope"
 npm-cli-login -u ${USERNAME} -p ${CI_CD_TOKEN} -e ${EMAIL} -r https://npm.pkg.github.com -s @${ORG_NAME}
+
+# echo "Install webpack"
+# npm install webpack webpack-cli
 
 # echo "Install dependencies"
 # npm ci
