@@ -60,30 +60,30 @@ echo "[default]
 aws_access_key_id = ${AWS_ACCESS_KEY_ID}
 aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}" > ~/.aws/credentials
 
+echo "Setting .npmrc file"
+
+echo "//npm.pkg.github.com/:_authToken=${CI_CD_TOKEN}
+@${ORG_NAME}:registry=https://npm.pkg.github.com
+registry=https://registry.npmjs.org/" > ~/.npmrc
+
 echo "Change directory to Source"
 cd $SOURCE_DIR
 
-echo "Install npm-cli-login"
-npm install npm-cli-login
+echo "Install webpack"
+npm install webpack webpack-cli
 
-echo "Set private org scope"
-npm-cli-login -u ${USERNAME} -p ${CI_CD_TOKEN} -e ${EMAIL} -r https://npm.pkg.github.com -s @${ORG_NAME}
+echo "Install all packages"
+npm i
 
-# echo "Install webpack"
-# npm install webpack webpack-cli
+echo "Run npx"
+npx webpack --mode development
 
-# echo "Install dependencies"
-# npm ci
+if [ -d "$DIST_DIR" ]; then
+    echo "Copying to website folder"
+    aws s3 sync ${DIST_DIR} s3://${AWS_S3_BUCKET} --exact-timestamps --delete --region ${AWS_DEFAULT_REGION} $*
+fi
 
-# echo "Run npx"
-# npx webpack --mode development
-
-# if [ -d "$DIST_DIR" ]; then
-#     echo "Copying to website folder"
-#     aws s3 sync ${DIST_DIR} s3://${AWS_S3_BUCKET} --exact-timestamps --delete --region ${AWS_DEFAULT_REGION} $*
-# fi
-
-# echo "Cleaning up things"
+echo "Cleaning up things"
 
 rm -rf ~/.npmrc
 rm -rf ~/.aws
