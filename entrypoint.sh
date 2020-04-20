@@ -69,18 +69,16 @@ npm install webpack webpack-cli npm-cli-login
 echo "Set private org scope"
 npm-cli-login -u ${USERNAME} -p ${CI_CD_TOKEN} -e ${EMAIL} -r https://npm.pkg.github.com -s @${ORG_NAME}
 
-echo "debugging ${ORG_NAME}"
+echo "Install dependencies"
+npm ci
 
-# echo "Install dependencies"
-# npm ci
+echo "Run npx"
+npx webpack --mode development
 
-# echo "Run npx"
-# npx webpack --mode development
-
-# if [ -d "$DIST_DIR" ]; then
-#     echo "Copying to website folder"
-#     aws s3 sync ${DIST_DIR} s3://${AWS_S3_BUCKET} --exact-timestamps --delete --region ${AWS_DEFAULT_REGION} $*
-# fi
+if [ -d "$DIST_DIR" ]; then
+    echo "Copying to website folder"
+    aws s3 sync ${DIST_DIR} s3://${AWS_S3_BUCKET} --exact-timestamps --delete --region ${AWS_DEFAULT_REGION} $*
+fi
 
 echo "Cleaning up things"
 
