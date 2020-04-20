@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - uses: turnerlabs/s3-sync-webpack-private-org-action@master
+      - uses: brockmdavis/s3-sync-webpack-private-org-action@master
         env:
           SOURCE_DIR: ${{ github.workspace }}
           DIST_DIR: ${{ github.workspace }}/dist/
